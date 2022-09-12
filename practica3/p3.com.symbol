@@ -1,0 +1,17 @@
+< THE SYMBOL TABLE >  p3.com  --  emu8086 assembler version: 4.08 
+===================================================================================================
+Name                     	Offset    	Size      	Type      	Segment   
+===================================================================================================
+MSG1                     	0020A     	-1        	LABEL     	(NOSEG)   
+MSG2                     	00215     	-1        	LABEL     	(NOSEG)   
+MSG3                     	00237     	-1        	LABEL     	(NOSEG)   
+MSG4                     	0025C     	-1        	LABEL     	(NOSEG)   
+MSG5                     	00281     	-1        	LABEL     	(NOSEG)   
+MSG6                     	002A6     	-1        	LABEL     	(NOSEG)   
+MSG7                     	002CB     	-1        	LABEL     	(NOSEG)   
+MSG8                     	002F0     	-1        	LABEL     	(NOSEG)   
+MSG_TAIL                 	00311     	-1        	LABEL     	(NOSEG)   
+===================================================================================================
+[ 9/11/2022  --  9:34:58 PM ] 
+< END >
+ 

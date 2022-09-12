@@ -1,0 +1,183 @@
+EMU8086 GENERATED LISTING. MACHINE CODE <- SOURCE.
+ 
+p3.com -- emu8086 assembler version: 4.08  
+ 
+[ 9/11/2022  --  9:34:58 PM ] 
+ 
+===================================================================================================
+[LINE]     LOC: MACHINE CODE                          SOURCE
+===================================================================================================
+ 
+[   1]        :                                       
+[   2]        :                                       
+[   3]        :                                       
+[   4]        :                                       
+[   5]        :                                       
+[   6]        :                                       name "p3"   ;
+[   7]        :                                       
+[   8]        :                                       ;   Este programa realiza la suma de dos datos
+[   9]        :                                       ;   el primero es un dato de 16 bits almacenado en
+[  10]        :                                       ;   la dirección de memoria 210H y 211H, la dirección
+[  11]        :                                       ;   210H tendra los 8 bits mas significativos, la direccion
+[  12]        :                                       ;   212H tendra el dato 2. la suma se realiza usando solo
+[  13]        :                                       ;   registros de 8 bits.
+[  14]        :                                       
+[  15]        :                                       org  100h	;
+[  16]        :                                       
+[  17]    0100: B8 03 10                              mov ax, 1003h
+[  18]    0103: BB 00 00                              mov bx, 0
+[  19]    0106: CD 10                                 int 10h
+[  20]        :                                       
+[  21]    0108: BA 05 07                              mov dx, 0705h   ;seccion
+[  22]    010B: BB 00 00                              mov bx, 0
+[  23]    010E: B3 9F                                 mov bl, 10011111b
+[  24]    0110: B9 0B 00                              mov cx, msg1_size
+[  25]    0113: B0 01                                 mov al, 01b
+[  26]    0115: BD 0A 02                              mov bp, msg1
+[  27]    0118: B4 13                                 mov ah, 13h
+[  28]    011A: CD 10                                 int 10h
+[  29]        :                                       
+[  30]    011C: BA 05 08                              mov dx, 0805h
+[  31]    011F: BB 00 00                              mov bx, 0
+[  32]    0122: B3 9F                                 mov bl, 10011111b
+[  33]    0124: B9 22 00                              mov cx, msg2_size
+[  34]    0127: B0 01                                 mov al, 01b
+[  35]    0129: BD 15 02                              mov bp, msg2
+[  36]    012C: B4 13                                 mov ah, 13h
+[  37]    012E: CD 10                                 int 10h
+[  38]        :                                       
+[  39]    0130: BA 05 09                              mov dx, 0905h   ;inst
+[  40]    0133: BB 00 00                              mov bx, 0
+[  41]    0136: B3 9F                                 mov bl, 10011111b
+[  42]    0138: B9 25 00                              mov cx, msg3_size
+[  43]    013B: B0 01                                 mov al, 01b
+[  44]    013D: BD 37 02                              mov bp, msg3
+[  45]    0140: B4 13                                 mov ah, 13h
+[  46]    0142: CD 10                                 int 10h
+[  47]        :                                       
+[  48]    0144: BA 05 0A                              mov dx, 0A05h    ;D1
+[  49]    0147: BB 00 00                              mov bx, 0
+[  50]    014A: B3 9F                                 mov bl, 10011111b
+[  51]    014C: B9 25 00                              mov cx, msg4_size
+[  52]    014F: B0 01                                 mov al, 01b
+[  53]    0151: BD 5C 02                              mov bp, msg4
+[  54]    0154: B4 13                                 mov ah, 13h
+[  55]    0156: CD 10                                 int 10h
+[  56]        :                                       ;D2
+[  57]    0158: BA 05 0B                              mov dx, 0B05h
+[  58]    015B: BB 00 00                              mov bx, 0
+[  59]    015E: B3 9F                                 mov bl, 10011111b
+[  60]    0160: B9 25 00                              mov cx, msg5_size
+[  61]    0163: B0 01                                 mov al, 01b
+[  62]    0165: BD 81 02                              mov bp, msg5
+[  63]    0168: B4 13                                 mov ah, 13h
+[  64]    016A: CD 10                                 int 10h
+[  65]        :                                       ;D3
+[  66]    016C: BA 05 0C                              mov dx, 0C05h
+[  67]    016F: BB 00 00                              mov bx, 0
+[  68]    0172: B3 9F                                 mov bl, 10011111b
+[  69]    0174: B9 25 00                              mov cx, msg6_size
+[  70]    0177: B0 01                                 mov al, 01b
+[  71]    0179: BD A6 02                              mov bp, msg6
+[  72]    017C: B4 13                                 mov ah, 13h
+[  73]    017E: CD 10                                 int 10h
+[  74]        :                                       
+[  75]    0180: BA 05 0D                              mov dx, 0D05h     ;D4
+[  76]    0183: BB 00 00                              mov bx, 0
+[  77]    0186: B3 9F                                 mov bl, 10011111b
+[  78]    0188: B9 25 00                              mov cx, msg7_size
+[  79]    018B: B0 01                                 mov al, 01b
+[  80]    018D: BD CB 02                              mov bp, msg7
+[  81]    0190: B4 13                                 mov ah, 13h
+[  82]    0192: CD 10                                 int 10h
+[  83]        :                                       
+[  84]    0194: BA 05 0F                              mov dx, 0F05h     ;D5
+[  85]    0197: BB 00 00                              mov bx, 0
+[  86]    019A: B3 9F                                 mov bl, 10011111b
+[  87]    019C: B9 21 00                              mov cx, msg8_size
+[  88]    019F: B0 01                                 mov al, 01b
+[  89]    01A1: BD F0 02                              mov bp, msg8
+[  90]    01A4: B4 13                                 mov ah, 13h
+[  91]    01A6: CD 10                                 int 10h
+[  92]        :                                       
+[  93]    01A8: C6 06 10 02 00                        mov [0x210],0
+[  94]    01AD: C6 06 11 02 00                        mov [0x211],0
+[  95]    01B2: C6 06 12 02 00                        mov [0x212],0
+[  96]    01B7: C6 06 13 02 00                        mov [0x213],0
+[  97]    01BC: C6 06 14 02 00                        mov [0x214],0
+[  98]    01C1: C6 06 15 02 00                        mov [0x215],0
+[  99]    01C6: C6 06 16 02 00                        mov [0x216],0
+[ 100]    01CB: C6 06 17 02 00                        mov [0x217],0
+[ 101]    01D0: C6 06 18 02 00                        mov [0x218],0
+[ 102]    01D5: C6 06 19 02 00                        mov [0x219],0
+[ 103]        :                                       
+[ 104]    01DA: B4 00                                 mov ah, 0
+[ 105]    01DC: CD 16                                 int 10110b
+[ 106]        :                                       
+[ 107]    01DE: B8 00 00                              mov ax,0
+[ 108]    01E1: B7 00                                 mov bh,0
+[ 109]    01E3: A0 10 02                              mov al,[0x210]
+[ 110]    01E6: 02 06 11 02                           add al,[0x211]
+[ 111]    01EA: 12 E4                                 adc ah, ah
+[ 112]    01EC: 02 06 12 02                           add al,[0x212]
+[ 113]    01F0: 12 E7                                 adc ah, bh
+[ 114]    01F2: 02 06 13 02                           add al,[0x213]
+[ 115]    01F6: 12 E7                                 adc ah, bh
+[ 116]    01F8: 02 06 14 02                           add al,[0x214]
+[ 117]    01FC: 12 E7                                 adc ah, bh
+[ 118]        :                                       
+[ 119]        :                                       
+[ 120]        :                                       
+[ 121]    01FE: 88 26 15 02                           mov [0215h],ah
+[ 122]    0202: A2 16 02                              mov [0216h],al
+[ 123]    0205: A3 17 02                              mov [0217h],ax
+[ 124]        :                                       
+[ 125]    0208: CD 20                                 int 20h
+[ 126]        :                                       
+[ 127]        :                                       
+[ 128]    020A: 53 65 63 63 69 6F 6E 20 44 30 38      msg1:         db "Seccion D08"
+[ 129]    0215: 49 6E 74 72 6F 64 75 63 65 20 74 75   msg2:         db "Introduce tus datos en la memoria:"
+                73 20 64 61 74 6F 73 20 65 6E 20 6C 
+                61 20 6D 65 6D 6F 72 69 61 3A       
+[ 130]    0237: 44 61 74 6F 31 20 64 65 20 38 20 62   msg3:         db "Dato1 de 8 bits en direcciones 0x0210"
+                69 74 73 20 65 6E 20 64 69 72 65 63 
+                63 69 6F 6E 65 73 20 30 78 30 32 31 
+                30                                  
+[ 131]    025C: 44 61 74 6F 32 20 64 65 20 38 20 62   msg4:         db "Dato2 de 8 bits en direcciones 0x0211"
+                69 74 73 20 65 6E 20 64 69 72 65 63 
+                63 69 6F 6E 65 73 20 30 78 30 32 31 
+                31                                  
+[ 132]    0281: 44 61 74 6F 33 20 64 65 20 38 20 62   msg5:         db "Dato3 de 8 bits en direcciones 0x0212"
+                69 74 73 20 65 6E 20 64 69 72 65 63 
+                63 69 6F 6E 65 73 20 30 78 30 32 31 
+                32                                  
+[ 133]    02A6: 44 61 74 6F 34 20 64 65 20 38 20 62   msg6:         db "Dato4 de 8 bits en direcciones 0x0213"
+                69 74 73 20 65 6E 20 64 69 72 65 63 
+                63 69 6F 6E 65 73 20 30 78 30 32 31 
+                33                                  
+[ 134]    02CB: 44 61 74 6F 35 20 64 65 20 38 20 62   msg7:         db "Dato5 de 8 bits en direcciones 0x0214"
+                69 74 73 20 65 6E 20 64 69 72 65 63 
+                63 69 6F 6E 65 73 20 30 78 30 32 31 
+                34                                  
+[ 135]    02F0: 4C 69 73 73 65 74 68 20 41 62 69 67   msg8:         db "Lisseth Abigail Martinez Castillo"
+                61 69 6C 20 4D 61 72 74 69 6E 65 7A 
+                20 43 61 73 74 69 6C 6C 6F          
+[ 136]        :                                       
+[ 137]    0311:                                       msg_tail:
+[ 138]        :                                       msg1_size = msg2 - msg1
+[ 139]        :                                       msg2_size = msg3 - msg2
+[ 140]        :                                       msg3_size = msg4 - msg3
+[ 141]        :                                       msg4_size = msg5 - msg4
+[ 142]        :                                       msg5_size = msg6 - msg5
+[ 143]        :                                       msg6_size = msg7 - msg6
+[ 144]        :                                       msg7_size = msg8 - msg7
+[ 145]        :                                       msg8_size = msg_tail - msg8
+[ 146]        :                                       
+ 
+===================================================================================================
+ 
+
+
+
+
+===================================================================================================
