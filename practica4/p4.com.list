@@ -1,0 +1,207 @@
+EMU8086 GENERATED LISTING. MACHINE CODE <- SOURCE.
+ 
+p4.com -- emu8086 assembler version: 4.08  
+ 
+[ 03/10/2022  --  11:50:29 p. m. ] 
+ 
+===================================================================================================
+[LINE]     LOC: MACHINE CODE                          SOURCE
+===================================================================================================
+ 
+[   1]        :                                       name "p4";
+[   2]        :                                       
+[   3]        :                                       org 100h
+[   4]        :                                       
+[   5]    0100: B8 EB 03                              mov ax, 1003
+[   6]    0103: BB 00 00                              mov bx, 0
+[   7]    0106: CD 10                                 int 10h
+[   8]        :                                       
+[   9]    0108: BA 05 07                              mov dx, 0705h
+[  10]    010B: BB 00 00                              mov bx, 0
+[  11]    010E: B3 9F                                 mov bl, 10011111b
+[  12]    0110: B9 2D 00                              mov cx, msg1_size
+[  13]    0113: B0 01                                 mov al, 01b
+[  14]    0115: BD 1B 02                              mov bp, msg1
+[  15]    0118: B4 13                                 mov ah, 13h
+[  16]    011A: CD 10                                 int 10h
+[  17]        :                                       
+[  18]    011C: BA 05 09                              mov dx, 0905h
+[  19]    011F: BB 00 00                              mov bx, 0
+[  20]    0122: B3 9F                                 mov bl, 10011111b
+[  21]    0124: B9 22 00                              mov cx, msg2_size
+[  22]    0127: B0 01                                 mov al, 01b
+[  23]    0129: BD 48 02                              mov bp, msg2
+[  24]    012C: B4 13                                 mov ah, 13h
+[  25]    012E: CD 10                                 int 10h
+[  26]        :                                       
+[  27]    0130: BA 05 0B                              mov dx, 0B05h
+[  28]    0133: BB 00 00                              mov bx, 0
+[  29]    0136: B3 9F                                 mov bl, 10011111b
+[  30]    0138: B9 29 00                              mov cx, msg3_size
+[  31]    013B: B0 01                                 mov al, 01b
+[  32]    013D: BD 6A 02                              mov bp, msg3
+[  33]    0140: B4 13                                 mov ah, 13h
+[  34]    0142: CD 10                                 int 10h
+[  35]        :                                       
+[  36]    0144: BA 05 0C                              mov dx, 0C05h
+[  37]    0147: BB 00 00                              mov bx, 0
+[  38]    014A: B3 9F                                 mov bl, 10011111b
+[  39]    014C: B9 31 00                              mov cx, msg4_size
+[  40]    014F: B0 01                                 mov al, 01b
+[  41]    0151: BD 93 02                              mov bp, msg4
+[  42]    0154: B4 13                                 mov ah, 13h
+[  43]    0156: CD 10                                 int 10h
+[  44]        :                                       
+[  45]    0158: BA 05 0D                              mov dx, 0D05h
+[  46]    015B: BB 00 00                              mov bx, 0
+[  47]    015E: B3 9F                                 mov bl, 10011111b
+[  48]    0160: B9 18 00                              mov cx, msg5_size
+[  49]    0163: B0 01                                 mov al, 01b
+[  50]    0165: BD C4 02                              mov bp, msg5
+[  51]    0168: B4 13                                 mov ah, 13h
+[  52]    016A: CD 10                                 int 10h
+[  53]        :                                       
+[  54]    016C: B4 00                                 mov ah, 0
+[  55]    016E: CD 16                                 int 10110b
+[  56]        :                                       
+[  57]    0170: B8 00 00                              mov ax, 0
+[  58]    0173: BB 00 00                              mov bx, 0
+[  59]        :                                       
+[  60]    0176: A1 FF 01                              mov ax,[Base]
+[  61]    0179: 8B 0E 01 02                           mov cx,[Exp]
+[  62]    017D: 83 F9 01                              cmp cx, 01h ;si son iguales se hace la siguiente linea, sino, se la salta
+[  63]    0180: 75 03 E9 6D 01                        je exp1
+[  64]        :                                       
+[  65]    0185: 49                                    dec cx
+[  66]        :                                       
+[  67]        :                                       ;primer caso, ambos operandos son la  base
+[  68]    0186: A3 13 02                              mov [OP1], ax
+[  69]    0189: A3 15 02                              mov [OP2], ax
+[  70]    018C: E8 4E 01                              call mult
+[  71]    018F: A1 17 02                              mov ax,[aux]
+[  72]    0192: 8B 1E 19 02                           mov bx,[aux+2]
+[  73]    0196: A3 07 02                              mov [CurrVal],ax   ;respaldo del resultado de la operacion anterior SE DEBE TRABAJAR SOBRE ESTE PORQUE aux SE SOBREESCRIBE
+[  74]    0199: 89 1E 09 02                           mov [CurrVal+2],bx
+[  75]        :                                       
+[  76]        :                                       
+[  77]        :                                       ;resto de los casos
+[  78]    019D:                                       it:
+[  79]        :                                       ;;se multiplica la base con los LSB del resultado anterior
+[  80]    019D: A1 FF 01                              mov ax,[Base]
+[  81]    01A0: 8B 1E 07 02                           mov bx,[CurrVal]
+[  82]        :                                       
+[  83]    01A4: A3 13 02                              mov [OP1], ax
+[  84]    01A7: 89 1E 15 02                           mov [OP2], bx
+[  85]    01AB: E8 2F 01                              call mult
+[  86]        :                                       
+[  87]    01AE: A1 17 02                              mov ax,[aux]
+[  88]    01B1: 8B 1E 19 02                           mov bx,[aux+2]
+[  89]    01B5: A3 0B 02                              mov [Restem1],ax
+[  90]    01B8: 89 1E 0D 02                           mov [Restem1+2],bx
+[  91]        :                                       
+[  92]        :                                       ;;se multiplica la base con los MSB del resultado anterior
+[  93]    01BC: A1 FF 01                              mov ax,[Base]
+[  94]    01BF: 8B 1E 09 02                           mov bx,[CurrVal+2]
+[  95]        :                                       
+[  96]    01C3: A3 13 02                              mov [OP1], ax
+[  97]    01C6: 89 1E 15 02                           mov [OP2], bx
+[  98]    01CA: E8 10 01                              call mult
+[  99]        :                                       
+[ 100]    01CD: A1 17 02                              mov ax,[aux]
+[ 101]    01D0: 8B 1E 19 02                           mov bx,[aux+2]
+[ 102]    01D4: A3 0F 02                              mov [Restem2],ax
+[ 103]    01D7: 89 1E 11 02                           mov [Restem2+2],bx
+[ 104]        :                                       
+[ 105]    01DB: A1 0D 02                              mov ax,[Restem1+2]
+[ 106]    01DE: 8B 1E 0F 02                           mov bx,[Restem2]
+[ 107]    01E2: 03 C3                                 add ax, bx
+[ 108]        :                                       
+[ 109]    01E4: A3 09 02                              mov [CurrVal+2], ax
+[ 110]    01E7: A1 0B 02                              mov ax, [Restem1]
+[ 111]    01EA: A3 07 02                              mov [CurrVal], ax
+[ 112]        :                                       
+[ 113]    01ED: E2 AE                                 loop it
+[ 114]        :                                       
+[ 115]    01EF: A1 07 02                              mov ax,[CurrVal]
+[ 116]    01F2: 8B 1E 09 02                           mov bx,[CurrVal+2]
+[ 117]    01F6: A3 03 02                              mov [ResFinal],ax   ;respaldo del resultado de la operacion anterior SE DEBE TRABAJAR SOBRE ESTE PORQUE aux SE SOBREESCRIBE
+[ 118]    01F9: 89 1E 05 02                           mov [ResFinal+2],bx
+[ 119]        :                                       
+[ 120]    01FD: CD 14                                 int 20
+[ 121]        :                                       
+[ 122]    01FF: 00 00                                 Base    dw 0
+[ 123]    0201: 00 00                                 Exp     dw 0
+[ 124]    0203: 00 00 00 00                           ResFinal dw 0,0
+[ 125]        :                                       
+[ 126]    0207: 00 00 00 00                           CurrVal dw 0,0 ;almacena los 32 bits con los que estamos trabajando actualmente, resultado de la ultima operacion de multiplicacion (respaldo)
+[ 127]        :                                       
+[ 128]        :                                       
+[ 129]        :                                       ;; variables que contienen el resultado de ambas multiplicaciones al separar la multiplicacion de 32x16 en 2 de 16x16
+[ 130]    020B: 00 00 00 00                           Restem1 dw 0,0  ;almacena el resultado que obtenemos al hacer la multiplicacion 16x16 del LSB original
+[ 131]    020F: 00 00 00 00                           Restem2 dw 0,0  ;almacena el resultado que obtenemos al hacer la multiplicacion 16x16 del MSB original
+[ 132]        :                                       
+[ 133]        :                                       ;;variables internas para el control de la multiplicacion
+[ 134]        :                                       
+[ 135]    0213: 00 00                                 OP1     dw 0
+[ 136]    0215: 00 00                                 OP2     dw 0
+[ 137]    0217: 00 00 00 00                           aux     dw 0,0  ;variable que contiene el resultado de las multiplicaciones, de ax y dx
+[ 138]        :                                       
+[ 139]        :                                       
+[ 140]    021B: 53 65 63 63 69 6F 6E 20 44 30 35 20   msg1:   db "Seccion D05 Lisseth Abigail Martinez Castillo"
+                4C 69 73 73 65 74 68 20 41 62 69 67 
+                61 69 6C 20 4D 61 72 74 69 6E 65 7A 
+                20 43 61 73 74 69 6C 6C 6F          
+[ 141]    0248: 49 6E 74 72 6F 64 75 63 65 20 74 75   msg2:   db "Introduce tus datos en la memoria:"
+                73 20 64 61 74 6F 73 20 65 6E 20 6C 
+                61 20 6D 65 6D 6F 72 69 61 3A       
+[ 142]    026A: 42 61 73 65 20 76 61 72 69 61 62 6C   msg3:   db "Base variable de entrada, base de 16 bits"
+                65 20 64 65 20 65 6E 74 72 61 64 61 
+                2C 20 62 61 73 65 20 64 65 20 31 36 
+                20 62 69 74 73                      
+[ 143]    0293: 45 78 70 20 76 61 72 69 61 62 6C 65   msg4:   db "Exp variable de entrada, exponente max de 16 bits"
+                20 64 65 20 65 6E 74 72 61 64 61 2C 
+                20 65 78 70 6F 6E 65 6E 74 65 20 6D 
+                61 78 20 64 65 20 31 36 20 62 69 74 
+                73                                  
+[ 144]    02C4: 52 65 73 46 69 6E 61 6C 20 76 61 72   msg5:   db "ResFinal variable salida"
+                69 61 62 6C 65 20 73 61 6C 69 64 61 
+                                                    
+[ 145]    02DC:                                       msg_tail:
+[ 146]        :                                       msg1_size = msg2 - msg1
+[ 147]        :                                       msg2_size = msg3 - msg2
+[ 148]        :                                       msg3_size = msg4 - msg3
+[ 149]        :                                       msg4_size = msg5 - msg4
+[ 150]        :                                       msg5_size = msg_tail - msg5
+[ 151]        :                                       
+[ 152]    02DC: C3                                    ret
+[ 153]    02DD:                                       mult:
+[ 154]    02DD: 50                                    push ax
+[ 155]    02DE: 53                                    push bx
+[ 156]    02DF: A1 13 02                              mov ax,[OP1]
+[ 157]    02E2: 8B 1E 15 02                           mov bx,[OP2]
+[ 158]    02E6: F7 E3                                 mul bx
+[ 159]    02E8: A3 17 02                              mov [aux],ax
+[ 160]    02EB: 89 16 19 02                           mov [aux+2],dx
+[ 161]    02EF: 5B                                    pop bx
+[ 162]    02F0: 58                                    pop ax
+[ 163]    02F1: C3                                    ret
+[ 164]        :                                       
+[ 165]    02F2:                                       exp1:
+[ 166]    02F2: B4 00                                 mov ah, 00h
+[ 167]    02F4: A3 03 02                              mov [ResFinal], ax
+[ 168]    02F7: CD 20                                 int 20h
+[ 169]        :                                       
+[ 170]        :                                       
+[ 171]        :                                       
+[ 172]        :                                       
+[ 173]        :                                       
+[ 174]        :                                       
+[ 175]        :                                       
+ 
+===================================================================================================
+ 
+
+
+
+
+===================================================================================================
