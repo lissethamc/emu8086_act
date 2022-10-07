@@ -73,6 +73,7 @@ name "p4";
     mov [CurrVal],ax   ;respaldo del resultado de la operacion anterior SE DEBE TRABAJAR SOBRE ESTE PORQUE aux SE SOBREESCRIBE
     mov [CurrVal+2],bx
     
+    dec cx
     
     ;resto de los casos
 it:
