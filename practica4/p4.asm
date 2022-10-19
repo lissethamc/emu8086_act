@@ -73,6 +73,7 @@ name "p4";
     mov [CurrVal],ax   ;respaldo del resultado de la operacion anterior SE DEBE TRABAJAR SOBRE ESTE PORQUE aux SE SOBREESCRIBE
     mov [CurrVal+2],bx
     
+    dec cx
     
     ;resto de los casos
 it:
@@ -139,9 +140,9 @@ it:
     
     
     msg1:   db "Seccion D05 Lisseth Abigail Martinez Castillo"
-    msg2:   db "Introduce tus datos en la memoria:"
-    msg3:   db "Base variable de entrada, base de 16 bits"
-    msg4:   db "Exp variable de entrada, exponente max de 16 bits"
+    msg2:   db "Introduce tus datos en las variables:"
+    msg3:   db "Base, variable de entrada, base de 16 bits"
+    msg4:   db "Exp, variable de entrada, exponente max de 16 bits"
     msg5:   db "ResFinal variable salida"
     msg_tail:
     msg1_size = msg2 - msg1
