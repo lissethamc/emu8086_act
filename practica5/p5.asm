@@ -15,7 +15,7 @@ coc    db 0,0
 resid  db 0
 ;;;;;;;;;;;;;;
 
-resBCD db 5 dup(0)
+resBCD db 0,0,0,0,0,0
 
 
 ini:
@@ -69,7 +69,15 @@ f_ciclo:
         mov al,0   
         
         ;;;;;;;;hasta aqui el resultado esta en la variable resBCD 
-        
+        lea si, resBCD
+        add si, 4
+        mov cx, 5 ;;checar si es correcto el conteo
+        call c_ascii_si
+        lea si, resBCD 
+        gotoxy 0,2
+        call print_string
+         
+        mov al,0
         int 0x20
         
         
@@ -139,10 +147,25 @@ copy:
     pop si
     pop cx
     pop ax
-    ret                  
+    ret  
+    
+
+c_ascii_si:  ;convierte ascii si
+    push ax  
+    push cx
+    push si  
+ascii:
+    add [si], 0x30
+    dec si
+    loop ascii
+    pop si
+    pop cx
+    pop ax
+    ret                
                     
 
-DEFINE_GET_STRING
+DEFINE_GET_STRING 
+DEFINE_PRINT_STRING
     ret
 
 
