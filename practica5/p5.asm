@@ -116,7 +116,7 @@ ediv32_8:
         test    [coc+1],0xFF
         jnz     no_zero
 no_zero:
-        pop ax
+        pop     ax
         ret 
     
 numbyte:; convierte 2 numeros ascii en un byte y lo almacena de auxb al 
@@ -160,17 +160,17 @@ copy:
     
 
 c_ascii_si:  ;convierte ascii si
-    push ax  
-    push cx
-    push si  
+        push    ax  
+        push    cx
+        push    si  
 ascii:
-    add [si], 0x30
-    dec si
-    loop ascii
-    pop si
-    pop cx
-    pop ax
-    ret                
+        add     [si], 0x30
+        dec     si
+        loop    ascii
+        pop     si
+        pop     cx
+        pop     ax
+        ret                
                     
 
 DEFINE_GET_STRING 
