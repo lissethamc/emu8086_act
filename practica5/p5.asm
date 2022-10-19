@@ -18,13 +18,20 @@ resid  db 0
 resBCD db 0,0,0,0,0,0
 
 
-ini:
-        xor ax, ax      
-        lea di, cadnum  
-        mov dx, 5      
-        call get_string  ;funcion get_string, almacena en la var que apunta di y dependiendo del valor de dx
+ini:    
         
-        lea si, nhex    ;apunta a si 
+        print   "Lisseth Abigail Martinez Castillo"
+        gotoxy  0,2
+        print   "Programa que convierte hex a BCD"
+        gotoxy  0,4
+        print   "Ingrese el numero hex de 16bit a convertir:"
+        gotoxy  45,4
+        xor     ax, ax      
+        lea     di, cadnum  
+        mov     dx, 5      
+        call    get_string  ;funcion get_string, almacena en la var que apunta di y dependiendo del valor de dx
+        
+        lea     si, nhex    ;apunta a si 
         
         mov     al,[di] ;mando a al el valor actual en di en ascii
         call    numbyte
@@ -47,65 +54,67 @@ ini:
         add     di,4
 
 ciclo:
-        mov al,10
-        mov [den],al
-        call div16bit     
-        jz f_ciclo 
-        mov al,[resid]
-        mov [di], al
-        dec di
-        push di
-        lea si,coc
-        lea di,numer
-        mov cx,2
-        call copy_si_di
-        pop di
-        jmp ciclo
+        mov     al,10
+        mov     [den],al
+        call    div16bit     
+        jz      f_ciclo 
+        mov     al,[resid]
+        mov     [di], al
+        dec     di
+        push    di
+        lea     si,coc
+        lea     di,numer
+        mov     cx,2
+        call    copy_si_di
+        pop     di
+        jmp     ciclo
 
         
 f_ciclo:
-        mov al,[resid]
-        mov [di],al
-        mov al,0   
+        mov     al,[resid]
+        mov     [di],al
+        mov     al,0   
         
         ;;;;;;;;hasta aqui el resultado esta en la variable resBCD 
-        lea si, resBCD
-        add si, 4
-        mov cx, 5 ;;checar si es correcto el conteo
-        call c_ascii_si
-        lea si, resBCD 
-        gotoxy 0,2
-        call print_string
+        lea     si, resBCD
+        add     si, 4
+        mov     cx, 5 ;;checar si es correcto el conteo
+        call    c_ascii_si
+        gotoxy  0,5
+        print   "El resultado en decimal es:"
+        lea     si, resBCD 
+        gotoxy  30,5
+        call    print_string
          
-        mov al,0
-        int 0x20
+        mov     al,0
+        int     0x20
         
         
 div16bit:
-        push ax
-        mov ah, 0
-        mov al,[numer]  
-        test [den],0xff  ;checamos que el denominador sea diferente de 0 es una compuerta and
-        jz div_zero 
-        div [den]
-        mov [coc],al  
-        mov al,[numer+1] 
-        div [den]
-        mov [coc+1], al
-        mov [resid],ah
+        push    ax
+        mov     ah, 0
+        mov     al,[numer]  
+        test    [den],0xff  ;checamos que el denominador sea diferente de 0 es una compuerta and
+        jz      div_zero 
+        div     [den]
+        mov     [coc],al  
+        mov     al,[numer+1] 
+        div     [den]
+        mov     [coc+1], al
+        mov     [resid],ah
         clc
-        jmp ediv32_8                            
-        div_zero:
-        mov al,0xff
-        mov [coc],al
-        mov [coc+1],al
-        mov [resid],al
+        jmp     ediv32_8                            
+div_zero:
+        mov     al,0xff
+        mov     [coc],al
+        mov     [coc+1],al
+        mov     [resid],al
         stc
-        ediv32_8:
-        test [coc],0xFF
-        jnz no_zero
-        test [coc+1],0xFF
-        jnz no_zero
+ediv32_8:
+        test    [coc],0xFF
+        jnz     no_zero
+        test    [coc+1],0xFF
+        jnz     no_zero
 no_zero:
         pop ax
         ret 
@@ -133,21 +142,21 @@ asc2num: ;funcion que recibe en <al> un valor en ascii, retorna en <al> el valor
 f_asc:  ret  
  
 copy_si_di:  ;rutina que copia el arreglo indicado por el registro SI
-    push ax  ;al arreglo indicado por el arreglo DI
-    push cx
-    push si
-    push di
+        push    ax  ;al arreglo indicado por el arreglo DI
+        push    cx
+        push    si
+        push    di
 copy:
-    mov al,[si]
-    mov [di], al 
-    inc si
-    inc di
-    loop copy
-    pop di
-    pop si
-    pop cx
-    pop ax
-    ret  
+        mov     al,[si]
+        mov     [di], al 
+        inc     si
+        inc     di
+        loop    copy
+        pop     di
+        pop     si
+        pop     cx
+        pop     ax
+        ret  
     
 
 c_ascii_si:  ;convierte ascii si

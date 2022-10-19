@@ -1,0 +1,231 @@
+EMU8086 GENERATED LISTING. MACHINE CODE <- SOURCE.
+ 
+p5.com -- emu8086 assembler version: 4.08  
+ 
+[ 19/10/2022  --  02:03:16 p. m. ] 
+ 
+===================================================================================================
+[LINE]     LOC: MACHINE CODE                          SOURCE
+===================================================================================================
+ 
+[   1]        :                                       name "p5"
+[   2]        :                                       include 'emu8086.inc'
+[   3]        :                                       
+[   4]        :                                       org 100h
+[   5]    0100: EB 14                                 jmp ini
+[   6]        :                                       
+[   7]    0102: 00 00 00 00 00                        cadnum db ?,?,?,?,?   ;variable de 16 bits
+[   8]    0107: 00 00                                 nhex   db ?,?         ;contiene el valor en hexadecimal convertido despues de obtener la cadena ascii
+[   9]    0109: 00                                    auxb   db ?
+[  10]        :                                       
+[  11]        :                                       ;;;;division
+[  12]    010A: 00 00                                 numer  db 0,0 ;numerador
+[  13]    010C: 00                                    den    db 0
+[  14]    010D: 00 00                                 coc    db 0,0
+[  15]    010F: 00                                    resid  db 0
+[  16]        :                                       ;;;;;;;;;;;;;;
+[  17]        :                                       
+[  18]    0110: 00 00 00 00 00 00                     resBCD db 0,0,0,0,0,0
+[  19]        :                                       
+[  20]        :                                       
+[  21]    0116:                                       ini:
+[  22]        :                                       
+[  23]    0116: 50 56 EB 22 4C 69 73 73 65 74 68 20   print   "Lisseth Abigail Martinez Castillo"
+                41 62 69 67 61 69 6C 20 4D 61 72 74 
+                69 6E 65 7A 20 43 61 73 74 69 6C 6C 
+                6F 00 BE 1A 01 2E 8A 04 3C 00 74 07 
+                46 B4 0E CD 10 EB F2 5E 58          
+[  24]    014F: 50 53 52 B4 02 B6 02 B2 00 B7 00 CD   gotoxy  0,2
+                10 5A 5B 58                         
+[  25]    015F: 50 56 EB 21 50 72 6F 67 72 61 6D 61   print   "Programa que convierte hex a BCD"
+                20 71 75 65 20 63 6F 6E 76 69 65 72 
+                74 65 20 68 65 78 20 61 20 42 43 44 
+                00 BE 63 01 2E 8A 04 3C 00 74 07 46 
+                B4 0E CD 10 EB F2 5E 58             
+[  26]    0197: 50 53 52 B4 02 B6 04 B2 00 B7 00 CD   gotoxy  0,4
+                10 5A 5B 58                         
+[  27]    01A7: 50 56 EB 2C 49 6E 67 72 65 73 65 20   print   "Ingrese el numero hex de 16bit a convertir:"
+                65 6C 20 6E 75 6D 65 72 6F 20 68 65 
+                78 20 64 65 20 31 36 62 69 74 20 61 
+                20 63 6F 6E 76 65 72 74 69 72 3A 00 
+                BE AB 01 2E 8A 04 3C 00 74 07 46 B4 
+                0E CD 10 EB F2 5E 58                
+[  28]    01EA: 50 53 52 B4 02 B6 04 B2 2D B7 00 CD   gotoxy  45,4
+                10 5A 5B 58                         
+[  29]    01FA: 33 C0                                 xor     ax, ax
+[  30]    01FC: BF 02 01                              lea     di, cadnum
+[  31]    01FF: BA 05 00                              mov     dx, 5
+[  32]    0202: E8 43 01                              call    get_string  ;funcion get_string, almacena en la var que apunta di y dependiendo del valor de dx
+[  33]        :                                       
+[  34]    0205: BE 07 01                              lea     si, nhex    ;apunta a si
+[  35]        :                                       
+[  36]    0208: 8A 05                                 mov     al,[di] ;mando a al el valor actual en di en ascii
+[  37]    020A: E8 F4 00                              call    numbyte
+[  38]    020D: A0 09 01                              mov     al,[auxb]
+[  39]    0210: 88 04                                 mov     [si],al
+[  40]    0212: 46                                    inc     si
+[  41]    0213: 47                                    inc     di
+[  42]        :                                       
+[  43]    0214: 8A 05                                 mov     al,[di]
+[  44]    0216: E8 E8 00                              call    numbyte
+[  45]    0219: A0 09 01                              mov     al,[auxb]
+[  46]    021C: 88 04                                 mov     [si],al
+[  47]        :                                       
+[  48]    021E: BE 07 01                              lea     si,nhex
+[  49]    0221: BF 0A 01                              lea     di,numer
+[  50]    0224: B9 02 00                              mov     cx, 2
+[  51]    0227: E8 FE 00                              call    copy_si_di
+[  52]        :                                       ;;;;;;;;hasta aqui tengo la cadena en hexa en nhex
+[  53]    022A: BF 10 01                              lea     di,resBCD ;DI apunta al lugar donde guardo los residuos
+[  54]    022D: 83 C7 04                              add     di,4
+[  55]        :                                       
+[  56]    0230:                                       ciclo:
+[  57]    0230: B0 0A                                 mov     al,10
+[  58]    0232: A2 0C 01                              mov     [den],al
+[  59]    0235: E8 88 00                              call    div16bit
+[  60]    0238: 74 16                                 jz      f_ciclo
+[  61]    023A: A0 0F 01                              mov     al,[resid]
+[  62]    023D: 88 05                                 mov     [di], al
+[  63]    023F: 4F                                    dec     di
+[  64]    0240: 57                                    push    di
+[  65]    0241: BE 0D 01                              lea     si,coc
+[  66]    0244: BF 0A 01                              lea     di,numer
+[  67]    0247: B9 02 00                              mov     cx,2
+[  68]    024A: E8 DB 00                              call    copy_si_di
+[  69]    024D: 5F                                    pop     di
+[  70]    024E: EB E0                                 jmp     ciclo
+[  71]        :                                       
+[  72]        :                                       
+[  73]    0250:                                       f_ciclo:
+[  74]    0250: A0 0F 01                              mov     al,[resid]
+[  75]    0253: 88 05                                 mov     [di],al
+[  76]    0255: B0 00                                 mov     al,0
+[  77]        :                                       
+[  78]        :                                       ;;;;;;;;hasta aqui el resultado esta en la variable resBCD
+[  79]    0257: BE 10 01                              lea     si, resBCD
+[  80]    025A: 83 C6 04                              add     si, 4
+[  81]    025D: B9 05 00                              mov     cx, 5 ;;checar si es correcto el conteo
+[  82]    0260: E8 D6 00                              call    c_ascii_si
+[  83]    0263: 50 53 52 B4 02 B6 05 B2 00 B7 00 CD   gotoxy  0,5
+                10 5A 5B 58                         
+[  84]    0273: 50 56 EB 1C 45 6C 20 72 65 73 75 6C   print   "El resultado en decimal es:"
+                74 61 64 6F 20 65 6E 20 64 65 63 69 
+                6D 61 6C 20 65 73 3A 00 BE 77 02 2E 
+                8A 04 3C 00 74 07 46 B4 0E CD 10 EB 
+                F2 5E 58                            
+[  85]    02A6: BE 10 01                              lea     si, resBCD
+[  86]    02A9: 50 53 52 B4 02 B6 05 B2 1E B7 00 CD   gotoxy  30,5
+                10 5A 5B 58                         
+[  87]    02B9: E8 DB 00                              call    print_string
+[  88]        :                                       
+[  89]    02BC: B0 00                                 mov     al,0
+[  90]    02BE: CD 20                                 int     0x20
+[  91]        :                                       
+[  92]        :                                       
+[  93]    02C0:                                       div16bit:
+[  94]    02C0: 50                                    push    ax
+[  95]    02C1: B4 00                                 mov     ah, 0
+[  96]    02C3: A0 0A 01                              mov     al,[numer]
+[  97]    02C6: F6 06 0C 01 FF                        test    [den],0xff  ;checamos que el denominador sea diferente de 0 es una compuerta and
+[  98]    02CB: 74 18                                 jz      div_zero
+[  99]    02CD: F6 36 0C 01                           div     [den]
+[ 100]    02D1: A2 0D 01                              mov     [coc],al
+[ 101]    02D4: A0 0B 01                              mov     al,[numer+1]
+[ 102]    02D7: F6 36 0C 01                           div     [den]
+[ 103]    02DB: A2 0E 01                              mov     [coc+1], al
+[ 104]    02DE: 88 26 0F 01                           mov     [resid],ah
+[ 105]    02E2: F8                                    clc
+[ 106]    02E3: EB 0C                                 jmp     ediv32_8
+[ 107]    02E5:                                       div_zero:
+[ 108]    02E5: B0 FF                                 mov     al,0xff
+[ 109]    02E7: A2 0D 01                              mov     [coc],al
+[ 110]    02EA: A2 0E 01                              mov     [coc+1],al
+[ 111]    02ED: A2 0F 01                              mov     [resid],al
+[ 112]    02F0: F9                                    stc
+[ 113]    02F1:                                       ediv32_8:
+[ 114]    02F1: F6 06 0D 01 FF                        test    [coc],0xFF
+[ 115]    02F6: 75 07                                 jnz     no_zero
+[ 116]    02F8: F6 06 0E 01 FF                        test    [coc+1],0xFF
+[ 117]    02FD: 75 00                                 jnz     no_zero
+[ 118]    02FF:                                       no_zero:
+[ 119]    02FF: 58                                    pop     ax
+[ 120]    0300: C3                                    ret
+[ 121]        :                                       
+[ 122]    0301:                                       numbyte:; convierte 2 numeros ascii en un byte y lo almacena de auxb al
+[ 123]    0301: E8 15 00                              call    asc2num
+[ 124]    0304: B3 10                                 mov     bl,16
+[ 125]    0306: F6 E3                                 mul     bl
+[ 126]    0308: A2 09 01                              mov     [auxb],al
+[ 127]    030B: 47                                    inc     di
+[ 128]    030C: 8A 05                                 mov     al,[di]
+[ 129]    030E: E8 08 00                              call    asc2num
+[ 130]    0311: 02 06 09 01                           add     al,[auxb]
+[ 131]    0315: A2 09 01                              mov     [auxb],al
+[ 132]    0318: C3                                    ret
+[ 133]        :                                       
+[ 134]    0319:                                       asc2num: ;funcion que recibe en <al> un valor en ascii, retorna en <al> el valor en hexadecimal
+[ 135]    0319: 2C 30                                 sub     al,48
+[ 136]    031B: 3C 09                                 cmp     al,9
+[ 137]    031D: 7E 08                                 jle     f_asc
+[ 138]    031F: 2C 07                                 sub     al,7
+[ 139]    0321: 3C 0F                                 cmp     al,15
+[ 140]    0323: 7E 02                                 jle     f_asc
+[ 141]    0325: 2C 20                                 sub     al,32
+[ 142]    0327: C3                                    f_asc:  ret
+[ 143]        :                                       
+[ 144]    0328:                                       copy_si_di:  ;rutina que copia el arreglo indicado por el registro SI
+[ 145]    0328: 50                                    push    ax  ;al arreglo indicado por el arreglo DI
+[ 146]    0329: 51                                    push    cx
+[ 147]    032A: 56                                    push    si
+[ 148]    032B: 57                                    push    di
+[ 149]    032C:                                       copy:
+[ 150]    032C: 8A 04                                 mov     al,[si]
+[ 151]    032E: 88 05                                 mov     [di], al
+[ 152]    0330: 46                                    inc     si
+[ 153]    0331: 47                                    inc     di
+[ 154]    0332: E2 F8                                 loop    copy
+[ 155]    0334: 5F                                    pop     di
+[ 156]    0335: 5E                                    pop     si
+[ 157]    0336: 59                                    pop     cx
+[ 158]    0337: 58                                    pop     ax
+[ 159]    0338: C3                                    ret
+[ 160]        :                                       
+[ 161]        :                                       
+[ 162]    0339:                                       c_ascii_si:  ;convierte ascii si
+[ 163]    0339: 50                                    push    ax
+[ 164]    033A: 51                                    push    cx
+[ 165]    033B: 56                                    push    si
+[ 166]    033C:                                       ascii:
+[ 167]    033C: 80 04 30                              add     [si], 0x30
+[ 168]    033F: 4E                                    dec     si
+[ 169]    0340: E2 FA                                 loop    ascii
+[ 170]    0342: 5E                                    pop     si
+[ 171]    0343: 59                                    pop     cx
+[ 172]    0344: 58                                    pop     ax
+[ 173]    0345: C3                                    ret
+[ 174]        :                                       
+[ 175]        :                                       
+[ 176]    0346: EB 4D 50 51 57 52 B9 00 00 83 FA 01   DEFINE_GET_STRING
+                76 3C 4A B4 00 CD 16 3C 0D 74 30 3C 
+                08 75 1E E3 F2 49 4F 50 B0 08 B4 0E 
+                CD 10 58 50 B0 20 B4 0E CD 10 58 50 
+                B0 08 B4 0E CD 10 58 EB D6 3B CA 73 
+                D2 88 05 47 41 B4 0E CD 10 EB C8 C6 
+                05 00 5A 5F 59 58 C3                
+[ 177]    0395: EB 12 50 56 8A 04 3C 00 74 07 46 B4   DEFINE_PRINT_STRING
+                0E CD 10 EB F3 5E 58 C3             
+[ 178]    03A9: C3                                    ret
+[ 179]        :                                       
+[ 180]        :                                       
+[ 181]        :                                       
+[ 182]        :                                       
+[ 183]        :                                       
+[ 184]        :                                       
+ 
+===================================================================================================
+ 
+
+
+
+
+===================================================================================================
