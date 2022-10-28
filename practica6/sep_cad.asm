@@ -1,4 +1,4 @@
-        NAME    "sep_cad"
+        NAME    "p6"
         ORG     0100H
         jmp     main
 
