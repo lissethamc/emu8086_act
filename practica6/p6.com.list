@@ -1,0 +1,376 @@
+EMU8086 GENERATED LISTING. MACHINE CODE <- SOURCE.
+ 
+p6.com -- emu8086 assembler version: 4.08  
+ 
+[ 27/10/2022  --  11:38:41 p. m. ] 
+ 
+===================================================================================================
+[LINE]     LOC: MACHINE CODE                          SOURCE
+===================================================================================================
+ 
+[   1]        :                                       NAME    "p6"
+[   2]        :                                       ORG     0100H
+[   3]    0100: E9 FF 02                              jmp     main
+[   4]        :                                       
+[   5]    0103: 00 00 00 00 00 00 00 00 00 00 00 00   linea   DB      81 DUP (0)  ;Arreglo de cadena
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00          
+[   6]    0154: 00                                    t_linea DB      0           ;Tamaño de cadena
+[   7]    0155: 00                                    salir   DB      0           ;Bandera para terminar un ciclo
+[   8]    0156: 00 00 00 00 00 00 00 00 00 00 00 00   datos   DW      10 DUP (0)  ;arreglo de datos.
+                00 00 00 00 00 00 00 00             
+[   9]    016A: 00 00 00 00 00                        opers   DB      5  DUP (0)
+[  10]    016F: 10                                    base    DB      16
+[  11]        :                                       
+[  12]        :                                       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+[  13]        :                                       
+[  14]    0170: 00                                    timesOp DB      0       ;cuenta cuantas veces se repite el mismo operador
+[  15]    0171: 00 00 00 00 00 00 00 00 00 00 00 00   uplinea DB      81 DUP (0)  ;mantiene el valor actual, el de la ultima operacion
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00          
+[  16]    01C2: 00                                    cantOp  DB      0
+[  17]        :                                       
+[  18]        :                                       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+[  19]        :                                       
+[  20]        :                                       ;OP1     DW      0
+[  21]        :                                       ;OP2     DW      0
+[  22]    01C3: 00 00                                 Res     DW      0
+[  23]        :                                       
+[  24]        :                                       
+[  25]        :                                       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+[  26]        :                                       
+[  27]    01C5: 0D 0A                                 NvaLine DB      0dh,0ah
+[  28]    01C7: 44 61 6D 65 20 65 6C 20 6E 6F 6D 62   msg1    DB      "Dame el nombre del archivo. usa el formato 8.3",0dH,0aH
+                72 65 20 64 65 6C 20 61 72 63 68 69 
+                76 6F 2E 20 75 73 61 20 65 6C 20 66 
+                6F 72 6D 61 74 6F 20 38 2E 33 0D 0A 
+                                                    
+[  29]    01F7: 45 73 63 72 69 62 65 20 75 6E 61 20   msg2    DB      "Escribe una linea, maximo 80 caracteres",0dH,0aH
+                6C 69 6E 65 61 2C 20 6D 61 78 69 6D 
+                6F 20 38 30 20 63 61 72 61 63 74 65 
+                72 65 73 0D 0A                      
+[  30]    0220: 50 72 65 73 69 6F 6E 61 20 3C 45 53   msg3    DB      "Presiona <ESC> PARA SALIR",0dH,0aH
+                43 3E 20 50 41 52 41 20 53 41 4C 49 
+                52 0D 0A                            
+[  31]    023B: 73 0D 0A                              msg4    DB      "s",0dH,0aH
+[  32]    023E: 46 75 6E 63 69 6F 6E 20 4E 6F 20 56   msge01  DB      "Funcion No Valida",0dh,0aH
+                61 6C 69 64 61 0D 0A                
+[  33]    0251: 41 72 63 68 69 76 6F 20 4E 6F 20 45   msge02  DB      "Archivo No Encontrado",0dH,0aH
+                6E 63 6F 6E 74 72 61 64 6F 0D 0A    
+[  34]    0268: 52 75 74 61 20 4E 6F 20 56 61 6C 69   msge03  DB      "Ruta No Valida",0dH,0aH
+                64 61 0D 0A                         
+[  35]    0278: 48 61 6E 64 6C 65 20 4E 6F 20 44 69   msge04  DB      "Handle No Disponible",0dH,0aH
+                73 70 6F 6E 69 62 6C 65 0D 0A       
+[  36]    028E: 41 63 63 65 73 6F 20 44 65 6E 65 67   msge05  DB      "Acceso Denegado",0dH,0aH
+                61 64 6F 0D 0A                      
+[  37]    029F: 48 61 6E 64 6C 65 20 6E 6F 20 76 61   msge06  DB      "Handle no valido",0dH,0aH
+                6C 69 64 6F 0D 0A                   
+[  38]    02B1: 43 61 72 61 63 74 65 72 20 6E 6F 20   msge07  DB      "Caracter no valido",0dH,0aH
+                76 61 6C 69 64 6F 0D 0A             
+[  39]    02C5: 73 0D 0A                              msge08  DB      "s",0dh,0aH
+[  40]    02C8: 73 0D 0A                              msge09  DB      "s",0dH,0aH
+[  41]    02CB: 73 0D 0A                              msge0A  DB      "s",0dH,0aH
+[  42]    02CE: 73 0D 0A                              msge0B  DB      "s",0dH,0aH
+[  43]    02D1: 73 0D 0A                              msge0C  DB      "s",0dH,0aH
+[  44]    02D4: 73 0D 0A                              msge0D  DB      "s",0dH,0aH
+[  45]    02D7: 73 0D 0A                              msge0E  DB      "s",0dH,0aH
+[  46]    02DA: 73 0D 0A                              msge0F  DB      "s",0dH,0aH
+[  47]    02DD: 45 78 63 65 64 65 20 65 6C 20 6E C3   msge10  DB      "Excede el número de caracteres",0dH,0aH
+                BA 6D 65 72 6F 20 64 65 20 63 61 72 
+                61 63 74 65 72 65 73 0D 0A          
+[  48]    02FE: 73 0D 0A                              msge11  DB      "s",0dH,0aH
+[  49]    0301: 13 00                                 tmsge01 DW      msge02 - offset msge01
+[  50]    0303: 17 00                                 tmsge02 DW      msge03 - offset msge02
+[  51]    0305: 10 00                                 tmsge03 DW      msge04 - offset msge03
+[  52]    0307: 16 00                                 tmsge04 DW      msge05 - offset msge04
+[  53]    0309: 11 00                                 tmsge05 DW      msge06 - offset msge05
+[  54]    030B: 12 00                                 tmsge06 DW      msge07 - offset msge06
+[  55]    030D: 14 00                                 tmsge07 DW      msge08 - offset msge07
+[  56]    030F: 03 00                                 tmsge08 DW      msge09 - offset msge08
+[  57]    0311: 03 00                                 tmsge09 DW      msge0A - offset msge09
+[  58]    0313: 03 00                                 tmsge0A DW      msge0B - offset msge0A
+[  59]    0315: 03 00                                 tmsge0B DW      msge0C - offset msge0B
+[  60]    0317: 03 00                                 tmsge0C DW      msge0D - offset msge0C
+[  61]    0319: 03 00                                 tmsge0D DW      msge0E - offset msge0D
+[  62]    031B: 03 00                                 tmsge0E DW      msge0F - offset msge0E
+[  63]    031D: 03 00                                 tmsge0F DW      msge10 - offset msge0F
+[  64]        :                                       
+[  65]    031F: 57                                    leecad: push    di
+[  66]    0320: 56                                    push    si
+[  67]    0321: 51                                    push    cx
+[  68]    0322: 50                                    push    ax
+[  69]    0323: 88 0E 54 01                           mov     [t_linea],cl
+[  70]    0327: E3 33                                 ntecla: jcxz    enc
+[  71]    0329: B4 00                                 mov     ah,0
+[  72]    032B: CD 16                                 int     16H
+[  73]    032D: 88 04                                 mov     [si],al
+[  74]    032F: 46                                    inc     si
+[  75]    0330: 49                                    dec     cx
+[  76]    0331: 3C 1B                                 cmp     al,1BH
+[  77]    0333: 75 07                                 jne     sigue
+[  78]    0335: C6 06 55 01 01                        mov     [salir],1
+[  79]    033A: EB 6D                                 jmp     FINCAD
+[  80]    033C: 3C 0D                                 sigue:  cmp     al,0DH
+[  81]    033E: 74 69                                 je      FINCAD
+[  82]    0340: 3C 08                                 cmp     al,08H
+[  83]    0342: 74 06                                 je      borra
+[  84]    0344: B4 0E                                 mov     ah,0EH
+[  85]    0346: CD 10                                 int     10H
+[  86]    0348: EB DD                                 jmp     ntecla
+[  87]    034A: 4E                                    borra:  dec     si
+[  88]    034B: 4E                                    dec     si
+[  89]    034C: 41                                    inc     cx
+[  90]    034D: 41                                    inc     cx
+[  91]    034E: B4 0E                                 mov     ah,0eH
+[  92]    0350: CD 10                                 int     10H
+[  93]    0352: B0 20                                 mov     al,20H
+[  94]    0354: CD 10                                 int     10H
+[  95]    0356: B0 08                                 mov     al,08
+[  96]    0358: CD 10                                 int     10H
+[  97]    035A: EB CB                                 jmp     ntecla
+[  98]    035C: BF DD 02                              enc:    lea     di,msge10  ;Excede el número de caracteres
+[  99]    035F: B9 21 00                              mov     cx,msge11 - offset msge10
+[ 100]    0362: B6 00                                 mov     dh,0
+[ 101]    0364: B2 00                                 mov     dl,0
+[ 102]    0366: E8 57 00                              call    imprime
+[ 103]    0369: B6 03                                 mov     dh,03
+[ 104]    036B: B2 00                                 	    mov     dl,0
+[ 105]    036D: B7 00                                 	    mov     bh, 0
+[ 106]    036F: B4 02                                 	    mov     ah, 2
+[ 107]    0371: CD 10                                 	    int     10h
+[ 108]    0373: BE 03 01                              lea     si,linea
+[ 109]    0376: B9 1E 00                              mov     cx,30
+[ 110]    0379: E8 6C 00                              call    limpia
+[ 111]    037C: BF F7 01                              lea     di,msg2  ;Escribe una linea, maximo 80 caracteres
+[ 112]    037F: B9 29 00                              mov     cx,msg3 - offset msg2
+[ 113]    0382: B6 01                                 mov     dh,1
+[ 114]    0384: B2 00                                 mov     dl,0
+[ 115]    0386: E8 37 00                              call    imprime
+[ 116]    0389: B6 03                                 mov     dh,03
+[ 117]    038B: B2 00                                 	    mov     dl,0
+[ 118]    038D: B7 00                                 	    mov     bh, 0
+[ 119]    038F: B4 02                                 	    mov     ah, 2
+[ 120]    0391: CD 10                                 	    int     10h
+[ 121]    0393: E8 40 00                              	    call    BorraLinea
+[ 122]    0396: B6 03                                 mov     dh,03
+[ 123]    0398: B2 00                                 	    mov     dl,0
+[ 124]    039A: B7 00                                 	    mov     bh, 0
+[ 125]    039C: B4 02                                 	    mov     ah, 2
+[ 126]    039E: CD 10                                 	    int     10h
+[ 127]    03A0: BE 03 01                              lea     si,linea
+[ 128]    03A3: B9 1E 00                              mov     cx,30
+[ 129]    03A6: E9 7E FF                              jmp     ntecla
+[ 130]    03A9: 4E                                    FINCAD: dec     si
+[ 131]    03AA: C6 04 00                              mov     [si],0
+[ 132]    03AD: B4 0E                                 mov     ah,0eH
+[ 133]    03AF: B0 0D                                 mov     al,0dH
+[ 134]    03B1: CD 10                                 int     10H
+[ 135]    03B3: B0 0A                                 mov     al,0aH
+[ 136]    03B5: CD 10                                 int     10H
+[ 137]    03B7: 28 0E 54 01                           sub     [t_linea],cl
+[ 138]    03BB: 58                                    pop     ax
+[ 139]    03BC: 59                                    pop     cx
+[ 140]    03BD: 5E                                    pop     si
+[ 141]    03BE: 5F                                    pop     di
+[ 142]    03BF: C3                                    ret
+[ 143]        :                                       
+[ 144]    03C0:                                       imprime:
+[ 145]    03C0: 53                                    	push    bx
+[ 146]    03C1: 50                                    	push    ax
+[ 147]    03C2: 06                                    	push    es
+[ 148]    03C3: B0 01                                 	mov     al,1
+[ 149]    03C5: B7 00                                 	mov     bh,0
+[ 150]    03C7: B3 3B                                 	mov     bl,0011_1011b
+[ 151]    03C9: 0E                                    	push    cs
+[ 152]    03CA: 07                                    	pop     es
+[ 153]    03CB: 8B EF                                 	mov     bp,di
+[ 154]    03CD: B4 13                                 	mov     ah,13h
+[ 155]    03CF: CD 10                                 	int     10h
+[ 156]    03D1: 07                                    	pop     es
+[ 157]    03D2: 58                                    	pop     ax
+[ 158]    03D3: 8F 07                                 	pop |   bx
+[ 159]    03D5: C3                                    	ret
+[ 160]        :                                       	
+[ 161]    03D6:                                       BorraLinea:
+[ 162]    03D6: 50                                    push    ax
+[ 163]    03D7: 53                                    push    bx
+[ 164]    03D8: 51                                    push    cx
+[ 165]    03D9: B9 50 00                              mov     cx,80
+[ 166]    03DC: B0 20                                 mov     al,32
+[ 167]    03DE: B7 00                                 mov     bh,0
+[ 168]    03E0: B4 0A                                 mov     ah,0aH
+[ 169]    03E2: CD 10                                 int     10H
+[ 170]    03E4: 59                                    pop     cx
+[ 171]    03E5: 5B                                    pop     bx
+[ 172]    03E6: 58                                    pop     ax
+[ 173]    03E7: C3                                    ret
+[ 174]        :                                       
+[ 175]    03E8: 56                                    limpia: push    si
+[ 176]    03E9: 51                                    push    cx
+[ 177]    03EA: C6 04 00                              l_lim:  mov     [si],0
+[ 178]    03ED: 46                                    inc     si
+[ 179]    03EE: E2 FA                                 loop    l_lim
+[ 180]    03F0: 59                                    pop     cx
+[ 181]    03F1: 5E                                    pop     si
+[ 182]    03F2: C3                                    ret	
+[ 183]        :                                       
+[ 184]    03F3:                                       asc2num:
+[ 185]    03F3: 2C 30                                 sub     al,48
+[ 186]    03F5: 3C 09                                 cmp     al,9
+[ 187]    03F7: 7E 08                                 jle     f_asc
+[ 188]    03F9: 2C 07                                 sub     al,7
+[ 189]    03FB: 3C 0F                                 cmp     al,15
+[ 190]    03FD: 7E 02                                 jle     f_asc
+[ 191]    03FF: 2C 20                                 sub     al,32
+[ 192]    0401: C3                                    f_asc:  ret
+[ 193]        :                                       
+[ 194]    0402:                                       main:
+[ 195]    0402: 33 C0                                 xor     ax,ax
+[ 196]    0404: 33 D2                                 xor     dx,dx
+[ 197]    0406: B9 1E 00                              mov     cx,30    ;cx debe tener el tamaño de la cadena para la funcion leecad
+[ 198]    0409: BE 03 01                              lea     si,linea ;Arreglo en el que se almacenara la cadena.
+[ 199]    040C: E8 10 FF                              call    leecad
+[ 200]    040F: BF 56 01                              lea     di,datos
+[ 201]    0412: BA 6A 01                              lea     dx,opers
+[ 202]    0415: 8A 04                                 mov     al,[si]
+[ 203]    0417: 3C 00                                 cmp     al,0
+[ 204]    0419: 74 57                                 je      fin
+[ 205]    041B: E8 D5 FF                              call    asc2num
+[ 206]    041E: 3C 0F                                 cmp     al,0fh
+[ 207]    0420: 77 41                                 ja      c_err ;Error de caracter.
+[ 208]    0422: 89 05                                 mov     [di],ax
+[ 209]    0424: 46                                    nvocar: inc     si
+[ 210]    0425: 8A 04                                 mov     al,[si]
+[ 211]    0427: A8 FF                                 test    al,0FFh
+[ 212]    0429: 74 47                                 je      fin
+[ 213]    042B: E8 C5 FF                              call    asc2num
+[ 214]    042E: 3C 0F                                 cmp     al,0fh
+[ 215]    0430: 77 12                                 ja      leeop
+[ 216]    0432: 52                                    push    dx
+[ 217]    0433: 50                                    push    ax
+[ 218]    0434: 8B 05                                 mov     ax,[di]
+[ 219]    0436: 8A 1E 6F 01                           mov     bl,[base]
+[ 220]    043A: F7 E3                                 mul     bx
+[ 221]    043C: 89 05                                 mov     [di],ax
+[ 222]    043E: 58                                    pop     ax
+[ 223]    043F: 5A                                    pop     dx
+[ 224]    0440: 01 05                                 add     [di],ax
+[ 225]    0442: EB E0                                 jmp     nvocar
+[ 226]    0444: 57                                    leeop:  push    di
+[ 227]    0445: 8B FA                                 mov     di,dx
+[ 228]    0447: 8A 04                                 mov     al,[si]
+[ 229]    0449: 3C 2A                                 cmp     al,'*'
+[ 230]    044B: 74 0C                                 je      op0
+[ 231]    044D: 3C 2F                                 op1:    cmp     al,'/'
+[ 232]    044F: 74 08                                 je      op0
+[ 233]    0451: 3C 2D                                 op2:    cmp     al,'-'
+[ 234]    0453: 74 04                                 je      op0
+[ 235]    0455: 3C 2B                                 op3:    cmp     al,'+'
+[ 236]    0457: 75 0A                                 jne     c_err
+[ 237]    0459: 88 05                                 op0:    mov     [di],al
+[ 238]    045B: 47                                    inc     di
+[ 239]    045C: 8B D7                                 mov     dx,di
+[ 240]    045E: 5F                                    pop     di
+[ 241]    045F: 47                                    inc     di
+[ 242]    0460: 47                                    inc     di
+[ 243]    0461: EB C1                                 jmp     nvocar
+[ 244]    0463: 57                                    c_err:  push    di
+[ 245]    0464: BF B1 02                              lea     di,msge07  ;Caracter no valido
+[ 246]    0467: B9 12 00                              mov     cx,msge07 - offset msge06
+[ 247]    046A: B6 05                                 mov     dh,5
+[ 248]    046C: B2 00                                 mov     dl,0
+[ 249]    046E: E8 4F FF                              call    imprime
+[ 250]    0471: 5F                                    pop     di
+[ 251]        :                                       
+[ 252]    0472:                                       fin:
+[ 253]    0472: 33 C0                                 xor     ax,ax
+[ 254]        :                                       
+[ 255]        :                                       ;;;;;;;;;;; creo q hasta aqui no importa dnd tengo mis ptrs pero x si acaso
+[ 256]        :                                       
+[ 257]        :                                       ;; si -> linea
+[ 258]        :                                       ;; di -> datos
+[ 259]        :                                       ;; dx -> operadores
+[ 260]        :                                       ;;;;;;;;
+[ 261]        :                                       ;; di -> operadores
+[ 262]        :                                       ;; di se intercambia con dx, se respalda el valor anterior de di en la pila cuando se usa dx y se restaura despues de usarlo
+[ 263]        :                                       
+[ 264]        :                                       ;;;;;;;;;;;;
+[ 265]        :                                       
+[ 266]        :                                       
+[ 267]        :                                       
+[ 268]    0474: 57                                    push    di ;respaldo el ptr a datos
+[ 269]    0475: 52                                    push    dx
+[ 270]        :                                       ;;;;;; inicializo ambos "ptrs" en ambos arreglos, pero di si itera sobre opers, mientras que bx solo sera referencia para cuando quiera saber cuales son los operadores relacionados
+[ 271]    0476: BA 56 01                              lea     dx, datos
+[ 272]    0479: BF 6A 01                              lea     di, opers
+[ 273]    047C: B9 00 00                              mov     cx, 00h
+[ 274]        :                                       
+[ 275]        :                                       
+[ 276]        :                                       ; cuenta longitud opers, LOS ALMACENA EN cantOp
+[ 277]    047F:                                       countopers:
+[ 278]    047F: 80 3D 00                              cmp     [di], 00h
+[ 279]    0482: 74 0A                                 je      checkops
+[ 280]    0484: 41                                    inc     cx
+[ 281]    0485: 47                                    inc     di
+[ 282]    0486: EB F7                                 jmp     countopers
+[ 283]        :                                       
+[ 284]    0488: CD 16                                 int     16h
+[ 285]    048A: 88 0E C2 01                           mov     [cantOp], cl
+[ 286]        :                                       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+[ 287]        :                                       
+[ 288]        :                                       ;itera sobre el arreglo de operandos checando que tipo de operador es
+[ 289]    048E:                                       checkops:
+[ 290]    048E: BF 6A 01                              lea     di, opers
+[ 291]    0491:                                       checkopsr:
+[ 292]    0491: 80 3D 2F                              cmp     [di], 2FH ; checa si es ascii de division "/"
+[ 293]    0494: 74 04                                 je      division
+[ 294]    0496: 47                                    inc     di
+[ 295]    0497: 42                                    inc     dx
+[ 296]    0498: E2 F7                                 loop    checkopsr
+[ 297]        :                                       
+[ 298]        :                                       
+[ 299]        :                                       
+[ 300]        :                                       
+[ 301]    049A:                                       division:
+[ 302]    049A: 50                                    push ax
+[ 303]    049B: 52                                    push dx
+[ 304]    049C: 57                                    push di
+[ 305]    049D: 8B FA                                 mov  di, dx
+[ 306]    049F: 8B 05                                 mov  ax, [di]  ;;bx tiene la direccion de datos del dato que corresponde a la div
+[ 307]        :                                       ;mov  [OP1], ax
+[ 308]    04A1: 8B 5D 02                              mov  bx, [di+2]
+[ 309]        :                                       ; mov  [OP2],ax
+[ 310]    04A4: F7 F3                                 div bx
+[ 311]    04A6: A3 C3 01                              mov [Res], ax
+[ 312]    04A9: 58                                    pop ax
+[ 313]    04AA: 5A                                    pop dx
+[ 314]    04AB: 5F                                    pop di
+[ 315]        :                                       
+[ 316]    04AC: 33 C0                                 xor ax, ax
+[ 317]    04AE: CD 10                                 int 16
+[ 318]        :                                       
+[ 319]        :                                       
+[ 320]        :                                       
+[ 321]        :                                       
+[ 322]    04B0:                                       endprg:
+[ 323]    04B0: 33 C0                                 xor     ax,ax
+[ 324]    04B2: CD 20                                 int     20h
+[ 325]        :                                       
+[ 326]        :                                       
+[ 327]        :                                       
+ 
+===================================================================================================
+ 
+
+
+
+
+===================================================================================================
