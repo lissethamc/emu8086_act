@@ -71,11 +71,13 @@ OP0                      	00459     	-1        	LABEL     	(NOSEG)
 C_ERR                    	00463     	-1        	LABEL     	(NOSEG)   
 FIN                      	00472     	-1        	LABEL     	(NOSEG)   
 COUNTOPERS               	0047F     	-1        	LABEL     	(NOSEG)   
-CHECKOPS                 	0048E     	-1        	LABEL     	(NOSEG)   
-CHECKOPSR                	00491     	-1        	LABEL     	(NOSEG)   
-DIVISION                 	0049A     	-1        	LABEL     	(NOSEG)   
-ENDPRG                   	004B0     	-1        	LABEL     	(NOSEG)   
+CHECKOPS                 	00488     	-1        	LABEL     	(NOSEG)   
+CHECKOPSR                	0048F     	-1        	LABEL     	(NOSEG)   
+DIVISION                 	00498     	-1        	LABEL     	(NOSEG)   
+ENDPRG                   	004B1     	-1        	LABEL     	(NOSEG)   
+RECORREOPERADORES        	004B5     	-1        	LABEL     	(NOSEG)   
+REPT                     	004C4     	-1        	LABEL     	(NOSEG)   
 ===================================================================================================
-[ 27/10/2022  --  11:38:41 p. m. ] 
+[ 28/10/2022  --  11:51:57 a. m. ] 
 < END >
  

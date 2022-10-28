@@ -2,7 +2,7 @@ EMU8086 GENERATED LISTING. MACHINE CODE <- SOURCE.
  
 p6.com -- emu8086 assembler version: 4.08  
  
-[ 27/10/2022  --  11:38:41 p. m. ] 
+[ 28/10/2022  --  11:51:57 a. m. ] 
  
 ===================================================================================================
 [LINE]     LOC: MACHINE CODE                          SOURCE
@@ -317,55 +317,87 @@ p6.com -- emu8086 assembler version: 4.08
 [ 276]        :                                       ; cuenta longitud opers, LOS ALMACENA EN cantOp
 [ 277]    047F:                                       countopers:
 [ 278]    047F: 80 3D 00                              cmp     [di], 00h
-[ 279]    0482: 74 0A                                 je      checkops
+[ 279]    0482: 74 04                                 je      checkops
 [ 280]    0484: 41                                    inc     cx
 [ 281]    0485: 47                                    inc     di
 [ 282]    0486: EB F7                                 jmp     countopers
 [ 283]        :                                       
-[ 284]    0488: CD 16                                 int     16h
-[ 285]    048A: 88 0E C2 01                           mov     [cantOp], cl
-[ 286]        :                                       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-[ 287]        :                                       
-[ 288]        :                                       ;itera sobre el arreglo de operandos checando que tipo de operador es
-[ 289]    048E:                                       checkops:
-[ 290]    048E: BF 6A 01                              lea     di, opers
-[ 291]    0491:                                       checkopsr:
-[ 292]    0491: 80 3D 2F                              cmp     [di], 2FH ; checa si es ascii de division "/"
-[ 293]    0494: 74 04                                 je      division
-[ 294]    0496: 47                                    inc     di
-[ 295]    0497: 42                                    inc     dx
-[ 296]    0498: E2 F7                                 loop    checkopsr
-[ 297]        :                                       
+[ 284]        :                                       ;int     16h
+[ 285]        :                                       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+[ 286]        :                                       
+[ 287]        :                                       ;itera sobre el arreglo de operandos checando que tipo de operador es
+[ 288]    0488:                                       checkops:
+[ 289]        :                                       
+[ 290]    0488: 88 0E C2 01                           mov     [cantOp], cl
+[ 291]    048C: BF 6A 01                              lea     di, opers
+[ 292]    048F:                                       checkopsr:
+[ 293]    048F: 80 3D 2F                              cmp     [di], 2FH ; checa si es ascii de division "/"
+[ 294]    0492: 74 04                                 je    division
+[ 295]    0494: 47                                    inc     di
+[ 296]    0495: 42                                    inc     dx
+[ 297]    0496: E2 F7                                 loop    checkopsr
 [ 298]        :                                       
 [ 299]        :                                       
 [ 300]        :                                       
-[ 301]    049A:                                       division:
-[ 302]    049A: 50                                    push ax
-[ 303]    049B: 52                                    push dx
-[ 304]    049C: 57                                    push di
-[ 305]    049D: 8B FA                                 mov  di, dx
-[ 306]    049F: 8B 05                                 mov  ax, [di]  ;;bx tiene la direccion de datos del dato que corresponde a la div
-[ 307]        :                                       ;mov  [OP1], ax
-[ 308]    04A1: 8B 5D 02                              mov  bx, [di+2]
-[ 309]        :                                       ; mov  [OP2],ax
-[ 310]    04A4: F7 F3                                 div bx
-[ 311]    04A6: A3 C3 01                              mov [Res], ax
-[ 312]    04A9: 58                                    pop ax
-[ 313]    04AA: 5A                                    pop dx
-[ 314]    04AB: 5F                                    pop di
-[ 315]        :                                       
-[ 316]    04AC: 33 C0                                 xor ax, ax
-[ 317]    04AE: CD 10                                 int 16
+[ 301]        :                                       
+[ 302]    0498:                                       division:
+[ 303]    0498: E8 1A 00                              call recorreoperadores   ;;;di apunta a opers, recorre arreglo recorreria para division
+[ 304]    049B: 50                                    push ax
+[ 305]    049C: 52                                    push dx
+[ 306]    049D: 57                                    push di
+[ 307]    049E: 8B FA                                 mov  di, dx
+[ 308]    04A0: 8B 05                                 mov  ax, [di]  ;;bx tiene la direccion de datos del dato que corresponde a la div
+[ 309]        :                                       ;mov  [OP1], ax
+[ 310]    04A2: 8B 5D 02                              mov  bx, [di+2]
+[ 311]        :                                       ; mov  [OP2],ax
+[ 312]    04A5: F7 F3                                 div bx
+[ 313]    04A7: A3 C3 01                              mov [Res], ax
+[ 314]        :                                       ;;;;;;;;;;;;;;; mov [di],ax;;awas cone sta linea <--- NO OLVIDES LISSETH BORRAR EL OPERADOR DE LA LISTA DE OPERADORES
+[ 315]    04AA: 58                                    pop ax
+[ 316]    04AB: 5A                                    pop dx
+[ 317]    04AC: 5F                                    pop di
 [ 318]        :                                       
 [ 319]        :                                       
 [ 320]        :                                       
-[ 321]        :                                       
-[ 322]    04B0:                                       endprg:
-[ 323]    04B0: 33 C0                                 xor     ax,ax
-[ 324]    04B2: CD 20                                 int     20h
+[ 321]    04AD: 33 C0                                 xor ax, ax
+[ 322]    04AF: CD 10                                 int 16
+[ 323]        :                                       
+[ 324]        :                                       
 [ 325]        :                                       
 [ 326]        :                                       
-[ 327]        :                                       
+[ 327]    04B1:                                       endprg:
+[ 328]    04B1: 33 C0                                 xor     ax,ax
+[ 329]    04B3: CD 20                                 int     20h
+[ 330]        :                                       
+[ 331]        :                                       ;;;;;funcion que una vez usado un operador recorre el resto del arreglo
+[ 332]        :                                       ;;;;;para ocupar ese lugar vacio, usa di
+[ 333]    04B5:                                       recorreoperadores:
+[ 334]    04B5: 50                                    push ax
+[ 335]    04B6: 52                                    push dx
+[ 336]    04B7: 57                                    push di
+[ 337]        :                                       
+[ 338]    04B8: 8A 26 C2 01                           mov ah, [cantOp]
+[ 339]    04BC: FE CC                                 dec ah
+[ 340]    04BE: 88 26 C2 01                           mov [cantOp], ah
+[ 341]        :                                       
+[ 342]    04C2: 33 C0                                 xor ax, ax
+[ 343]        :                                       
+[ 344]    04C4:                                       rept:
+[ 345]    04C4: 8A 45 01                              mov  al, b.[di+1]
+[ 346]    04C7: 88 05                                 mov  [di],al
+[ 347]    04C9: 47                                    inc di
+[ 348]        :                                       
+[ 349]    04CA: 80 3D 00                              cmp [di], 00H
+[ 350]    04CD: 75 F5                                 jne rept
+[ 351]        :                                       
+[ 352]    04CF: 58                                    pop ax
+[ 353]    04D0: 5A                                    pop dx
+[ 354]    04D1: 5F                                    pop di
+[ 355]    04D2: C3                                    ret
+[ 356]        :                                       
+[ 357]        :                                       
+[ 358]        :                                       
+[ 359]        :                                       
  
 ===================================================================================================
  
