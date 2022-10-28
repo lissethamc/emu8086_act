@@ -281,16 +281,17 @@ fin:
         inc     di
         jmp     countopers
         
-        int     16h 
-        mov     [cantOp], cl
+        ;int     16h 
        ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
         
         ;itera sobre el arreglo de operandos checando que tipo de operador es
-checkops:              
+checkops: 
+        
+        mov     [cantOp], cl             
         lea     di, opers   
 checkopsr:
         cmp     [di], 2FH ; checa si es ascii de division "/"
-        je      division
+        je    division
         inc     di 
         inc     dx
         loop    checkopsr 
@@ -298,7 +299,8 @@ checkopsr:
  
  
  
-division:       
+division:
+        call recorreoperadores   ;;;di apunta a opers, recorre arreglo recorreria para division
         push ax
         push dx
         push di 
@@ -308,10 +310,14 @@ division:
         mov  bx, [di+2]
        ; mov  [OP2],ax 
         div bx  
-        mov [Res], ax
+        mov [Res], ax 
+       ;;;;;;;;;;;;;;; mov [di],ax;;awas cone sta linea <--- NO OLVIDES LISSETH BORRAR EL OPERADOR DE LA LISTA DE OPERADORES 
+        call recorredatos
         pop ax
         pop dx 
         pop di
+   
+        
         
         xor ax, ax
         int 16
@@ -322,4 +328,60 @@ division:
  endprg:
         xor     ax,ax       
         int     20h
+        
+       ;;;;;funcion que una vez usado un operador recorre el resto del arreglo 
+       ;;;;;para ocupar ese lugar vacio, usa di, di->opers
+ recorreoperadores: 
+        push ax
+        push dx
+        push di
+    
+        mov ah, [cantOp]
+        dec ah
+        mov [cantOp], ah 
+                     
+        xor ax, ax   
+        
+      rept:
+        mov  al, b.[di+1] 
+        mov  [di],al
+        inc di
+        
+        cmp [di], 00H
+        jne rept  
+        
+        pop ax
+        pop dx
+        pop di
+        ret
+        
+        ;;;;funcion que reescribe el resultado de la operacion division en los operadores, es decir a+b = c entonces c va a ocupar el espacio de a y debemos borrar b
+        ;;;;recorre los datos ya utilizados, hasta ahorita: 
+        ;;;;di->opers
+        ;;;;dx->datos
+        ;;;;hay que reasignar los ptrs para poder usar di con datos
+ recorredatos:
+        push ax
+        push dx
+        push di
+               
+        lea di, datos
+        
+        mov ax,[Res]
+        mov [di], ax
+rept2:     
+        mov ax,[di+4]
+        mov [di+2],ax
+        inc di
+        cmp w.[di], 00h
+        jne rept2
+        ;mov [di+2], 00h
+        
+         
+        
+        pop ax
+        pop dx
+        pop di
+        ret
+        
         

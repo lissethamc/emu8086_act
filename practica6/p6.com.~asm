@@ -312,6 +312,7 @@ mov  bx, [di+2]
 div bx
 mov [Res], ax
 ;;;;;;;;;;;;;;; mov [di],ax;;awas cone sta linea <--- NO OLVIDES LISSETH BORRAR EL OPERADOR DE LA LISTA DE OPERADORES
+call recorredatos
 pop ax
 pop dx
 pop di
@@ -329,7 +330,7 @@ xor     ax,ax
 int     20h
 
 ;;;;;funcion que una vez usado un operador recorre el resto del arreglo
-;;;;;para ocupar ese lugar vacio, usa di
+;;;;;para ocupar ese lugar vacio, usa di, di->opers
 recorreoperadores:
 push ax
 push dx
@@ -354,6 +355,34 @@ pop dx
 pop di
 ret
 
+;;;;funcion que reescribe el resultado de la operacion division en los operadores, es decir a+b = c entonces c va a ocupar el espacio de a y debemos borrar b
+;;;;recorre los datos ya utilizados, hasta ahorita:
+;;;;di->opers
+;;;;dx->datos
+;;;;hay que reasignar los ptrs para poder usar di con datos
+recorredatos:
+push ax
+push dx
+push di
+
+lea di, datos
+
+mov ax,[Res]
+mov [di], ax
+rept2:
+mov ax,[di+4]
+mov [di+2],ax
+inc di
+cmp w.[di], 00h
+jne rept2
+;mov [di+2], 00h
+
+
+
+pop ax
+pop dx
+pop di
+ret
 
 
 

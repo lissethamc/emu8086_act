@@ -74,10 +74,12 @@ COUNTOPERS               	0047F     	-1        	LABEL     	(NOSEG)
 CHECKOPS                 	00488     	-1        	LABEL     	(NOSEG)   
 CHECKOPSR                	0048F     	-1        	LABEL     	(NOSEG)   
 DIVISION                 	00498     	-1        	LABEL     	(NOSEG)   
-ENDPRG                   	004B1     	-1        	LABEL     	(NOSEG)   
-RECORREOPERADORES        	004B5     	-1        	LABEL     	(NOSEG)   
-REPT                     	004C4     	-1        	LABEL     	(NOSEG)   
+ENDPRG                   	004B4     	-1        	LABEL     	(NOSEG)   
+RECORREOPERADORES        	004B8     	-1        	LABEL     	(NOSEG)   
+REPT                     	004C7     	-1        	LABEL     	(NOSEG)   
+RECORREDATOS             	004D6     	-1        	LABEL     	(NOSEG)   
+REPT2                    	004E1     	-1        	LABEL     	(NOSEG)   
 ===================================================================================================
-[ 28/10/2022  --  11:51:57 a. m. ] 
+[ 28/10/2022  --  01:20:34 p. m. ] 
 < END >
  
