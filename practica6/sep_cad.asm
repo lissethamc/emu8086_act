@@ -292,9 +292,11 @@ checkops:
 checkopsr:
         cmp     [di], 2FH ; checa si es ascii de division "/"
         je    division
-        inc     di 
+        inc     di    
+        inc     dx   
         inc     dx
-        loop    checkopsr 
+        loop    checkopsr
+       ;;; jmp checkops 
         
  
  
@@ -304,11 +306,15 @@ division:
         push ax
         push dx
         push di 
+        xor ax, ax
+        
+        int 16h
         mov  di, dx
+        xor dx, dx
         mov  ax, [di]  ;;bx tiene la direccion de datos del dato que corresponde a la div
         ;mov  [OP1], ax
         mov  bx, [di+2]
-       ; mov  [OP2],ax 
+       ; mov  [OP2],ax
         div bx  
         mov [Res], ax 
        ;;;;;;;;;;;;;;; mov [di],ax;;awas cone sta linea <--- NO OLVIDES LISSETH BORRAR EL OPERADOR DE LA LISTA DE OPERADORES 
@@ -316,7 +322,7 @@ division:
         pop ax
         pop dx 
         pop di
-   
+        jmp checkops
         
         
         xor ax, ax
@@ -365,7 +371,7 @@ division:
         push dx
         push di
                
-        lea di, datos
+        ;lea di, datos  ;;;NO REASIGNAR DI YA RECIBE DI CON EL VALOR APUNTANDO A LA DIRECCION QUE CORRESPONDE
         
         mov ax,[Res]
         mov [di], ax
