@@ -1,0 +1,39 @@
+Algoritmo:
+-lee toda la cadena
+-la almacena en ASCII en la variable <linea>
+-lo a guarda en word(16bits) en la variable <datos>
+-guarda los operandos en la variable <opers> como ascii
+-cuando termina de hacer las separaciones y almacenamientos salta a lbl fin (linea 212)
+*********aqui empieza mi programa***************
+-respaldo di y dx ****supongo que se pueden borrar*** linea 268 y 269
+-apunto dx a datos
+-apunto di a opers
+-inicializo cx en 00, vamos a contar cuantos operandos en la variable <opers> existen: (por eso estoy apuntado di a opers)
+	-si di en la posición actual == 00, es decir terminó la línea, se acabaron los operandos, puedo pasar a la siguiente rutina que es checkops, sino, incremento cx, que es el contador que lleva el conteo de operandos
+	-incremento mi puntero di
+	-repito las 2 instrucciones anteriores
+
+-la siguiente rutina (checkops), se encarga de buscar un valor de 2f dentro de <opers>, 2f = /, es decir division, si la hay, la ejecuta y simplifica las variables <opers> y <datos>
+****Respalda el valor obtenido anterior de cx, es decir la cantidad de operadores en la variable cantOp
+-posiciona di en la primer direccion de opers de nuevo
+-si la posicion actual de di == 2F, hacemos la rutina llamada division, 
+-sino incrementamos a la siguiente posicion en di, Y TAMBIEN SE INCREMENTA DX 2 VECES LEER NOTA
+----->>>NOTA: Actualmente dx se encuentra "apuntando" a datos, no está siendo usado pero está iterando en relación a di, ya que cada par de números, 
+	lleva en medio un operador, hay que conservar esa relación, por lo que al iterar para identificar si existe un operando == 2f(/), el cual vamos 
+	a recorrer en el arreglo <opers> debemos también apuntar al dato que se le relaciona, aunque como <opers> es un valor de 8 bits y <datos> de 16 bits,
+	 dx que apunta a <datos> debe incrementar 2 veces, mientras que <opers> una única vez
+----->>>FIN NOTA
+	DIVISION:
+	-llama a la rutina recorreoperadores
+		-RECORREOPERADORES:
+		-respalda los valores que tenga ax y di pues se van a modificar
+		-recupera el valor de cantOp a ah para decrementarlo 1 vez y lo actualiza en cantOp, porque vamos a recorrer una vez el valor
+		-limpio el registro ax
+		-di actualmente apunta al valor de <opers> que mandó a llamar la función div, valor que ya no nos es relevante pues validamos de antemano que es una division, así que tomo el siguiente valor (di+1) y lo paso a al
+		-el valor en al lo sobreescribimos en di, el valor actual
+		-incrementamos el puntero
+		-¿di apunta a 00, es decir es final de cadena?, si no es final de cadena repetimos los ultimos 3 pasos, si es final de ca 
+	-respaldo el valor de ax, dx, di, pues se van a modificar
+	-ahora vamos a iterar sobre <datos> por lo que tenemos que apuntar di a dx, ya que dx ha llevado las direcciones de el operador relacionado al operando que "activo" la funcion de desplazar los datos
+	-
+

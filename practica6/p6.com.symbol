@@ -71,15 +71,17 @@ OP0                      	00459     	-1        	LABEL     	(NOSEG)
 C_ERR                    	00463     	-1        	LABEL     	(NOSEG)   
 FIN                      	00472     	-1        	LABEL     	(NOSEG)   
 COUNTOPERS               	0047F     	-1        	LABEL     	(NOSEG)   
-CHECKOPS                 	00488     	-1        	LABEL     	(NOSEG)   
+CHECKOPS1                	00488     	-1        	LABEL     	(NOSEG)   
+CHECKOPS                 	0048C     	-1        	LABEL     	(NOSEG)   
 CHECKOPSR                	0048F     	-1        	LABEL     	(NOSEG)   
-DIVISION                 	00498     	-1        	LABEL     	(NOSEG)   
-ENDPRG                   	004B4     	-1        	LABEL     	(NOSEG)   
-RECORREOPERADORES        	004B8     	-1        	LABEL     	(NOSEG)   
-REPT                     	004C7     	-1        	LABEL     	(NOSEG)   
-RECORREDATOS             	004D6     	-1        	LABEL     	(NOSEG)   
-REPT2                    	004E1     	-1        	LABEL     	(NOSEG)   
+ENDPRG                   	004A3     	-1        	LABEL     	(NOSEG)   
+DIVISION                 	004A7     	-1        	LABEL     	(NOSEG)   
+MULTIPLICACION           	004C3     	-1        	LABEL     	(NOSEG)   
+RECORREOPERADORES        	004E3     	-1        	LABEL     	(NOSEG)   
+REPT                     	004F1     	-1        	LABEL     	(NOSEG)   
+RECORREDATOS             	004FF     	-1        	LABEL     	(NOSEG)   
+REPT2                    	00507     	-1        	LABEL     	(NOSEG)   
 ===================================================================================================
-[ 28/10/2022  --  01:20:34 p. m. ] 
+[ 03/11/2022  --  01:13:18 a. m. ] 
 < END >
  
