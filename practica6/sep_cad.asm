@@ -48,7 +48,7 @@ msge11  DB      "-",0dH,0aH
 
 msge12  DB      "Lisseth Abigail Martinez Castillo"
 msge13  DB      "Ingrese una cadena, puede contener:" 
-msge14  DB      "5 Operadores"   
+msge14  DB      "5 Operadores, el primer valor no puede ser negativo"   
 msge15  DB      "Operandos de 4 digitos (rellenar con 0, ejemplo 0002)"
 msge16  DB      "El resultado es: " 
 msge17  DB      ".",0dH,0aH
@@ -386,7 +386,7 @@ no_signo:
         inc     di
         inc     di
         inc     di   
-        
+        mov     bh, 00h
         mov     ax, [si]
         mov     bl, 10h
 repdiv:  
@@ -403,12 +403,13 @@ repdiv:
         cmp     ax, 00h
         jnz     repdiv
         
-        dec     di
-        
+       
+        lea     si, Total
+        mov     [si], 20h
      
         
         lea     si, Total 
-        gotoxy  15,5 
+        gotoxy  28,11 
         call    print_string
         
         
