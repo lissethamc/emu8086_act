@@ -1,3 +1,4 @@
+include 'emu8086.inc'       
         NAME    "p6"
         ORG     0100H
         jmp     main
@@ -6,19 +7,17 @@ linea   DB      81 DUP (0)  ;Arreglo de cadena
 t_linea DB      0           ;Tamaño de cadena
 salir   DB      0           ;Bandera para terminar un ciclo
 datos   DW      10 DUP (0)  ;arreglo de datos.
-opers   DB      5  DUP (0) 
-base    DB      16 
+opers   DB      6  DUP (0) 
+base    DB      16   
+currOp  DB      0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-timesOp DB      0       ;cuenta cuantas veces se repite el mismo operador
-uplinea DB      81 DUP (0)  ;mantiene el valor actual, el de la ultima operacion
+timesOp DB      0       ;cuenta cuantas veces se repite el mismo operador       
 cantOp  DB      0
                                        
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+Total   DB      6 DUP (0)
 
-;OP1     DW      0
-;OP2     DW      0
 Res     DW      0
 
 
@@ -45,7 +44,15 @@ msge0D  DB      "s",0dH,0aH
 msge0E  DB      "s",0dH,0aH
 msge0F  DB      "s",0dH,0aH
 msge10  DB      "Excede el número de caracteres",0dH,0aH
-msge11  DB      "s",0dH,0aH
+msge11  DB      "-",0dH,0aH  
+
+msge12  DB      "Lisseth Abigail Martinez Castillo"
+msge13  DB      "Ingrese una cadena, puede contener:" 
+msge14  DB      "5 Operadores"   
+msge15  DB      "Operandos de 4 digitos (rellenar con 0, ejemplo 0002)"
+msge16  DB      "El resultado es: " 
+msge17  DB      ".",0dH,0aH
+
 tmsge01 DW      msge02 - offset msge01
 tmsge02 DW      msge03 - offset msge02
 tmsge03 DW      msge04 - offset msge03
@@ -61,6 +68,14 @@ tmsge0C DW      msge0D - offset msge0C
 tmsge0D DW      msge0E - offset msge0D
 tmsge0E DW      msge0F - offset msge0E
 tmsge0F DW      msge10 - offset msge0F
+tmesge12 DW     msge12 - offset msge11 
+tmesge13 DW     msge13 - offset msge12
+tmesge14 DW     msge14 - offset msge13
+tmesge15 DW     msge15 - offset msge14
+tmesge16 DW     msge16 - offset msge15
+tmesge17 DW     msge17 - offset msge16
+
+    
        
 leecad: push    di
         push    si
@@ -155,7 +170,7 @@ imprime:
     	int     10h
     	pop     es
     	pop     ax
-    	pop |   bx
+    	pop     bx
     	ret
     	
 BorraLinea:
@@ -192,6 +207,36 @@ asc2num:
 f_asc:  ret        
 
 main:   
+        lea     di,msge12  ;Excede el número de caracteres
+        mov     cx,msge13 - offset msge12
+        mov     dh,5
+        mov     dl,5
+        call    imprime 
+        
+        lea     di,msge13  ;Excede el número de caracteres
+        mov     cx,msge14 - offset msge13
+        mov     dh,6
+        mov     dl,5
+        call    imprime
+        
+        lea     di,msge14  ;Excede el número de caracteres
+        mov     cx,msge15 - offset msge14
+        mov     dh,7
+        mov     dl,5
+        call    imprime
+        
+        lea     di,msge15  ;Excede el número de caracteres
+        mov     cx,msge16 - offset msge15
+        mov     dh,8
+        mov     dl,5
+        call    imprime
+                    
+                    
+        mov     dh,9
+        mov     dl,5
+        mov     ah,2
+        int     10h
+        
         xor     ax,ax
         xor     dx,dx
         mov     cx,30    ;cx debe tener el tamaño de la cadena para la funcion leecad
@@ -249,8 +294,7 @@ c_err:  push    di
         call    imprime
         pop     di
         
-fin:        
-        xor     ax,ax
+fin:             
         
         ;;;;;;;;;;; creo q hasta aqui no importa dnd tengo mis ptrs pero x si acaso
         
@@ -292,7 +336,7 @@ checkops:   ;;;retorno del resto de operaciones, para que no se reasigne cl al c
         lea     di, opers   
 checkopsr:  
         cmp     [di], 00h
-        je      endprg
+        je      checkopers2
         cmp     [di], 2FH ; checa si es ascii de division "/"
         je      division
         cmp     [di], 2AH ; checa si el ascii de multiplicacion "*", puedo hacer la comparacion aqui pq tienen la misma jerarquia
@@ -301,22 +345,88 @@ checkopsr:
         inc     dx   
         inc     dx 
         loop    checkopsr
+           
+checkopers2:
+        lea     dx, datos                               
+checkops2:   ;;;retorno del resto de operaciones, para que no se reasigne cl al contador
+        lea     di, opers   
+cicl:  
+        cmp     [di], 00h
+        je      endprg
+        cmp     [di], 2BH ; checa si es ascii de division "/"
+        je      suma
+        cmp     [di], 2DH ; checa si el ascii de multiplicacion "*", puedo hacer la comparacion aqui pq tienen la misma jerarquia
+        je      resta
+        inc     di    
+        inc     dx   
+        inc     dx 
+        loop    cicl        
+        
+        endprg:   
+        popf
+        lea     di,msge16  
+        mov     cx,msge17 - offset msge16
+        mov     dh,11
+        mov     dl,5
+        call    imprime 
+       
+       
+        
+        lea     di, Total
+        
+        jnc     no_signo
+        
+        mov     [di], 2Dh
+        
+        
+no_signo: 
+
+        lea     si, datos
+        inc     di
+        inc     di
+        inc     di
+        inc     di   
+        
+        mov     ax, [si]
+        mov     bl, 10h
+repdiv:  
+        xor     dx,dx
+        div     bx
+        cmp     dl, 9
+        jle     numero
+        add     dl, 0x07
+ numero:
+        add     dl, 0x30
+        mov     [di], dl
+       
+        dec     di
+        cmp     ax, 00h
+        jnz     repdiv
+        
+        dec     di
+        
+     
+        
+        lea     si, Total 
+        gotoxy  15,5 
+        call    print_string
         
         
         
-        endprg:
         xor     ax,ax       
         int     20h
+        
  
  
 division:
         call recorreoperadores   ;;;di apunta a opers, recorre arreglo recorreria para division
         push    ax
-        push    dx
+        push    dx  
         push    di 
+        
         mov     di, dx
         xor     dx, dx
-        mov     ax, [di]  ;;bx tiene la direccion de datos del dato que corresponde a la div
+        mov     ax, [di]  ;;dx tiene la direccion de datos del dato que corresponde a la div
         ;mov  [OP1], ax
         mov     bx, [di+2]
        ; mov  [OP2],ax
@@ -327,18 +437,15 @@ division:
         pop     di
         pop     dx 
         pop     ax
-        jmp     checkops
+        jmp     checkopsr
         
         
 
 multiplicacion:
-        call recorreoperadores   ;;;di apunta a opers, recorre arreglo recorreria para division
+        call recorreoperadores   ;;;di apunta a opers, recorre arreglo recorreria para multiplicaciones
         push    ax
         push    dx
-        push    di 
-        xor     ax, ax
-        
-        int 16h
+        push    di
         mov     di, dx
         xor     dx, dx
         mov     ax, [di]  ;;bx tiene la direccion de datos del dato que corresponde a la div
@@ -352,7 +459,50 @@ multiplicacion:
         pop     di
         pop     dx 
         pop     ax
-        jmp     checkops
+        jmp     checkopsr
+        
+suma:
+        call recorreoperadores   ;;;di apunta a opers, recorre arreglo recorreria para multiplicaciones
+        push    ax
+        push    dx
+        push    di 
+     
+        mov     di, dx
+        xor     dx, dx
+        mov     ax, [di]  ;;bx tiene la direccion de datos del dato que corresponde a la div
+        ;mov  [OP1], ax
+        mov     bx, [di+2]
+       ; mov  [OP2],ax
+        add     ax,bx  
+        mov     [Res], ax 
+       ;;;;;;;;;;;;;;; mov [di],ax;;awas cone sta linea 
+        call    recorredatos
+        pop     di
+        pop     dx 
+        pop     ax
+        jmp     cicl
+
+resta:
+        call recorreoperadores   ;;;di apunta a opers, recorre arreglo recorreria para multiplicaciones
+        push    ax
+        push    dx
+        push    di 
+       
+        mov     di, dx
+        xor     dx, dx
+        mov     ax, [di]  ;;bx tiene la direccion de datos del dato que corresponde a la div
+        ;mov  [OP1], ax
+        mov     bx, [di+2]
+       ; mov  [OP2],ax
+        sub     ax,bx  
+        mov     [Res], ax 
+       ;;;;;;;;;;;;;;; mov [di],ax;;awas cone sta linea 
+        call    recorredatos
+        pop     di
+        pop     dx 
+        pop     ax 
+        pushf
+        jmp     cicl
         
         
        ;;;;;funcion que una vez usado un operador recorre el resto del arreglo 
@@ -394,8 +544,9 @@ multiplicacion:
         mov     ax,[Res]
         mov     [di], ax
     rept2:     
-        mov     ax,[di+4]
-        mov     [di+2],ax
+        mov     ax,w.[di+4]
+        mov     w.[di+2],ax
+        inc     di
         inc     di
         cmp     w.[di], 00h
         jne     rept2
@@ -407,5 +558,7 @@ multiplicacion:
         pop     dx
         pop     ax
         ret
-        
+          
+DEFINE_PRINT_STRING
+end
         
